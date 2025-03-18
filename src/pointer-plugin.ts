@@ -1,7 +1,10 @@
 export interface PointerPluginLike extends g.OperationPlugin {
 	game: g.Game;
 	latestPointerPoint: Readonly<g.CommonOffset> | null;
-	onTouch: g.Trigger;
+	/** ポインタータイプが変わったときに発火 */
+	onPointerTypeChanged: g.Trigger<string>;
+	/** 最後のポインタータイプ */
+	pointerType: string;
 }
 
 export interface PointerPluginStatic extends g.OperationPluginStatic {
@@ -18,8 +21,10 @@ export const PointerPlugin: PointerPluginStatic = class implements PointerPlugin
 	_onPointerMove_bound: (e: PointerEvent) => void;
 	_getScale: () => { x: number; y: number };
 
-	/** タッチを検出したときに発火 */
-	onTouch: g.Trigger;
+	/** ポインタータイプが変わったときに発火 */
+	onPointerTypeChanged: g.Trigger<string>;
+	/** 最後のポインタータイプ */
+	pointerType: string = "";
 
 	static isSupported(): boolean {
 		return (typeof document !== "undefined") && (typeof document.addEventListener === "function");
@@ -35,11 +40,11 @@ export const PointerPlugin: PointerPluginStatic = class implements PointerPlugin
 		this._onMouseMove_bound = this._onMouseMove.bind(this);
 		this._onPointerMove_bound = this._onPointerMove.bind(this);
 
-		this.onTouch = new g.Trigger();
+		this.onPointerTypeChanged = new g.Trigger();
 	}
 
 	start(): boolean {
-		if("onpointermove" in (this.view as any)) {
+		if ("onpointermove" in (this.view as any)) {
 			this.view.addEventListener("pointermove", this._onPointerMove_bound, false);
 		} else {
 			this.view.addEventListener("mousemove", this._onMouseMove_bound, false);
@@ -65,10 +70,9 @@ export const PointerPlugin: PointerPluginStatic = class implements PointerPlugin
 	}
 
 	_onPointerMove(e: PointerEvent): void {
-		// タッチなら無視する
-		if(e.pointerType === "touch") {
-			this.onTouch.fire();
-			return;
+		if(this.pointerType !== e.pointerType) {
+			this.pointerType = e.pointerType;
+			this.onPointerTypeChanged.fire(this.pointerType);
 		}
 
 		const rect = this.view.getBoundingClientRect();
