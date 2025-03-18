@@ -1,6 +1,7 @@
 export interface PointerPluginLike extends g.OperationPlugin {
 	game: g.Game;
 	latestPointerPoint: Readonly<g.CommonOffset> | null;
+	onTouch: g.Trigger;
 }
 
 export interface PointerPluginStatic extends g.OperationPluginStatic {
