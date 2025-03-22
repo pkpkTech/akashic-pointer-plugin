@@ -1,6 +1,6 @@
 {
   "name": "akashic-pointer-plugin",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Akashic Engineでマウスポインタの位置を調べるプラグイン",
   "main": "lib/pointer-plugin.js",
   "typings": "lib/pointer-plugin.d.ts",

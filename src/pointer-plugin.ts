@@ -1,5 +1,6 @@
 export interface PointerPluginLike extends g.OperationPlugin {
 	game: g.Game;
+	view: HTMLElement;
 	latestPointerPoint: Readonly<g.CommonOffset> | null;
 	/** ポインタータイプが変わったときに発火 */
 	onPointerTypeChanged: g.Trigger<string>;
@@ -70,7 +71,7 @@ export const PointerPlugin: PointerPluginStatic = class implements PointerPlugin
 	}
 
 	_onPointerMove(e: PointerEvent): void {
-		if(this.pointerType !== e.pointerType) {
+		if (this.pointerType !== e.pointerType) {
 			this.pointerType = e.pointerType;
 			this.onPointerTypeChanged.fire(this.pointerType);
 		}
