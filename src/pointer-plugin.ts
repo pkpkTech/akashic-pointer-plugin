@@ -25,7 +25,7 @@ export const PointerPlugin: PointerPluginStatic = class implements PointerPlugin
 	/** ポインタータイプが変わったときに発火 */
 	onPointerTypeChanged: g.Trigger<string>;
 	/** 最後のポインタータイプ */
-	pointerType: string = "";
+	pointerType: string = "touch";
 
 	static isSupported(): boolean {
 		return (typeof document !== "undefined") && (typeof document.addEventListener === "function");
