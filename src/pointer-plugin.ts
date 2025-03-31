@@ -1,7 +1,7 @@
 export interface PointerPluginLike extends g.OperationPlugin {
 	game: g.Game;
 	view: HTMLElement;
-	latestPointerPoint: Readonly<g.CommonOffset> | null;
+	latestPointerPoint: Readonly<g.CommonOffset> | undefined;
 	/** ポインタータイプが変わったときに発火 */
 	onPointerTypeChanged: g.Trigger<string>;
 	/** 最後のポインタータイプ */
@@ -16,7 +16,7 @@ export const PointerPlugin: PointerPluginStatic = class implements PointerPlugin
 	game: g.Game;
 	view: HTMLElement;
 	operationTrigger: g.Trigger<g.OperationPluginOperation | (number | string)[]>;
-	latestPointerPoint: Readonly<g.CommonOffset> | null;
+	latestPointerPoint: Readonly<g.CommonOffset> | undefined;
 
 	_onMouseMove_bound: (e: MouseEvent) => void;
 	_onPointerMove_bound: (e: PointerEvent) => void;
@@ -35,7 +35,7 @@ export const PointerPlugin: PointerPluginStatic = class implements PointerPlugin
 		this.game = game;
 		this.view = viewInfo!.view as HTMLElement; // viewInfo が必ず渡ってくるため null にはならない
 		this.operationTrigger = new g.Trigger();
-		this.latestPointerPoint = null;
+		this.latestPointerPoint = undefined;
 		this._getScale = (viewInfo as any).getScale ? () => (viewInfo as any).getScale() : () => { return { x: 1, y: 1 } };
 
 		this._onMouseMove_bound = this._onMouseMove.bind(this);
